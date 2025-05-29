@@ -1,4 +1,4 @@
-import 'package:zapchat/src/initialization.dart';
+import 'src/initialization.dart';
 import 'package:zaplab_design/zaplab_design.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +15,7 @@ class App extends ConsumerWidget {
     return ProviderScope(
       child: Consumer(
         builder: (context, ref, _) {
-          final value = ref.watch(zapchatInitializationProvider);
+          final value = ref.watch(zapstoreInitializationProvider);
           return switch (value) {
             AsyncLoading() => AppResponsiveTheme(
                 child: AppBase(
@@ -107,7 +107,7 @@ class _AppWithTheme extends ConsumerWidget {
           onProfilesTap: () {
             goRouter.push('/settings');
           },
-          currentProfile: ref.watch(Profile.signedInProfileProvider),
+          activeProfile: ref.watch(Signer.activeProfileProvider),
           historyMenu: const HistoryContent(),
         );
       },

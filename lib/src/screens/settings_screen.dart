@@ -2,15 +2,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zaplab_design/zaplab_design.dart';
 import 'package:models/models.dart';
-import 'package:zapchat/src/providers/theme_settings.dart';
+import '../providers/theme_settings.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final signedInPubkeys = ref.watch(Profile.signedInPubkeysProvider);
-    final currentProfile = ref.watch(Profile.signedInProfileProvider);
+    final signedInPubkeys = ref.watch(Signer.signedInPubkeysProvider);
+    final activeProfile = ref.watch(Signer.activeProfileProvider);
     final themeState = ref.watch(themeSettingsProvider);
 
     if (signedInPubkeys.isEmpty) {
@@ -35,12 +35,7 @@ class SettingsScreen extends ConsumerWidget {
       );
     }
 
-    if (currentProfile == null && profiles.isNotEmpty) {
-      // If no current profile but we have user profiles, set the first one
-      profiles.first.setAsActive();
-    }
-
-    if (currentProfile == null) {
+    if (activeProfile == null) {
       return const Center(
         child: AppLoadingDots(),
       );
@@ -51,10 +46,10 @@ class SettingsScreen extends ConsumerWidget {
     final textScale = themeState.value?.textScale ?? AppTextScale.normal;
 
     return AppSettingsScreen(
-      currentProfile: currentProfile,
+      activeProfile: activeProfile,
       profiles: profiles,
       onSelect: (profile) {
-        profile.setAsActive();
+        ref.read(Signer.signerProvider(profile.pubkey))?.setActive();
       },
       onViewProfile: (profile) =>
           context.push('/profile/${profile.npub}', extra: profile),
@@ -64,25 +59,20 @@ class SettingsScreen extends ConsumerWidget {
       historyDescription: 'Last activity 12m ago',
       onDraftsTap: () => context.push('/settings/drafts'),
       draftsDescription: '21 Drafts',
-      onLabelsTap: () => context.push('/settings/labels'),
-      labelsDescription: '21 Public, 34 Private',
-      onAppearanceTap: () => context.push('/settings/appearance'),
-      appearanceDescription:
+      onPreferencesTap: () => context.push('/settings/appearance'),
+      preferencesDescription:
           '${themeMode.name.capitalize()} theme, ${textScale.name.capitalize()} text',
       onHostingTap: () => context.push('/settings/hosting'),
-      hostingDescription: '21 GB on 3 Relays, 2 Servers',
-      onSecurityTap: () => context.push('/settings/security'),
-      securityDescription: 'Secure mode, Keys are backed up',
-      onOtherDevicesTap: () => context.push('/settings/other-devices'),
-      otherDevicesDescription: 'Last activity 12m ago',
+      hostingDescription: "No Hosting or Back Up solutions added",
+      hostingStatuses: [
+        HostingStatus.online,
+        HostingStatus.warning,
+        HostingStatus.offline,
+      ],
+      onSignerTap: () => context.push('/settings/security'),
+      signerDescription: 'Secure mode, Keys are backed up',
       onInviteTap: () => context.push('/settings/invite'),
       onDisconnectTap: () => context.push('/settings/disconnect'),
     );
-  }
-}
-
-extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${substring(1)}";
   }
 }

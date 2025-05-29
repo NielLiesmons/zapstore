@@ -15,7 +15,7 @@ packages:
       path: "../amber_signer"
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.0.1"
   analyzer:
     dependency: transitive
     description:
@@ -579,11 +579,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "6d096b1"
-      resolved-ref: "6d096b1b968ee1b3eaa0b9731e560398ab6e8b6d"
-      url: "https://github.com/purplebase/models.git"
+      ref: "217fdc3"
+      resolved-ref: "217fdc3ff412de0102811ec60d36f815c983e398"
+      url: "https://github.com/purplebase/models"
     source: git
-    version: "0.1.0"
+    version: "0.1.1"
   package_config:
     dependency: transitive
     description:

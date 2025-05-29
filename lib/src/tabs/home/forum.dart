@@ -1,37 +1,33 @@
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:models/models.dart';
 import 'package:zaplab_design/zaplab_design.dart';
-import 'package:go_router/go_router.dart';
 import '../../providers/resolvers.dart';
 
-class ThreadsTab extends StatelessWidget {
-  const ThreadsTab({super.key});
+class ForumTab extends StatelessWidget {
+  const ForumTab({super.key});
 
   TabData tabData(BuildContext context) {
     return TabData(
-      label: 'Threads',
-      icon: const AppEmojiContentType(contentType: 'thread'),
+      label: 'Forum',
+      icon: const AppEmojiContentType(contentType: 'forum'),
+      bottomBar: const AppBottomBarSafeArea(),
       content: HookConsumer(
         builder: (context, ref, _) {
-          final state = ref.watch(query<Note>());
-
-          if (state case StorageLoading()) {
-            return const AppLoadingFeed(type: LoadingFeedType.thread);
-          }
-
-          final threads = state.models.cast<Note>();
+          final forumPosts =
+              ref.watch(query<ForumPost>()).models.cast<ForumPost>();
 
           return Column(
             children: [
-              for (final thread in threads)
-                AppFeedThread(
-                  thread: thread,
-                  onTap: (event) =>
-                      context.push('/thread/${event.id}', extra: event),
-                  onReply: (event) =>
-                      context.push('/reply-to/${event.id}', extra: event),
-                  onActions: (event) =>
-                      context.push('/actions/${event.id}', extra: event),
+              for (final forumPost in forumPosts)
+                AppFeedForumPost(
+                  forumPost: forumPost,
+                  onTap: (model) =>
+                      context.push('/forum/${model.id}', extra: model),
+                  onReply: (model) =>
+                      context.push('/reply-to/${model.id}', extra: model),
+                  onActions: (model) =>
+                      context.push('/actions/${model.id}', extra: model),
                   onReactionTap: (reaction) {},
                   onZapTap: (zap) {},
                   onResolveEvent: ref.read(resolversProvider).eventResolver,

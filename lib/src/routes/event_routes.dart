@@ -2,12 +2,12 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:models/models.dart';
 import 'package:zaplab_design/zaplab_design.dart';
-import 'package:zapchat/src/providers/resolvers.dart';
-import 'package:zapchat/src/providers/search.dart';
-import 'package:zapchat/src/screens/thread_screen.dart';
-import 'package:zapchat/src/screens/article_screen.dart';
-import 'package:zapchat/src/screens/mail_screen.dart';
-import 'package:zapchat/src/modals/reply_modal.dart';
+import '../providers/resolvers.dart';
+import '../providers/search.dart';
+
+import '../screens/mail_screen.dart';
+import '../modals/reply_modal.dart';
+import '../modals/actions_modal.dart';
 
 String getModelRoute(String modelType) {
   return switch (modelType.toLowerCase()) {
@@ -55,33 +55,8 @@ List<GoRoute> get eventRoutes => [
           return AppSlideInModal(
             child: Consumer(
               builder: (context, ref, _) {
-                return AppActionsModal(
+                return ActionsModal(
                   model: model,
-                  onModelTap: (model) {},
-                  onReplyTap: (model) {
-                    context.replace('/reply-to/${model.id}', extra: model);
-                  },
-                  recentEmoji: AppDefaultData.defaultEmoji,
-                  recentAmounts: AppDefaultData.defaultAmounts,
-                  onEmojiTap: (emoji) {},
-                  onMoreEmojiTap: () {},
-                  onZapTap: (model) {},
-                  onMoreZapsTap: (model) {
-                    return () =>
-                        context.replace('/zap/${model.id}', extra: model);
-                  },
-                  onReportTap: (model) {},
-                  onAddProfileTap: (model) {},
-                  onOpenWithTap: (model) {},
-                  onLabelTap: (model) {},
-                  onShareTap: (model) {},
-                  onResolveEvent: ref.read(resolversProvider).eventResolver,
-                  onResolveProfile: ref.read(resolversProvider).profileResolver,
-                  onResolveEmoji: ref.read(resolversProvider).emojiResolver,
-                  onResolveHashtag: (identifier) async {
-                    await Future.delayed(const Duration(seconds: 1));
-                    return () {};
-                  },
                 );
               },
             ),
@@ -138,36 +113,6 @@ List<GoRoute> get eventRoutes => [
               builder: (context, ref, _) {
                 return MailScreen(
                   mail: model as Mail,
-                );
-              },
-            ),
-          );
-        },
-      ),
-      GoRoute(
-        path: '/thread/:eventId',
-        pageBuilder: (context, state) {
-          final event = state.extra as Model;
-          return AppSlideInScreen(
-            child: Consumer(
-              builder: (context, ref, _) {
-                return ThreadScreen(
-                  thread: event as Note,
-                );
-              },
-            ),
-          );
-        },
-      ),
-      GoRoute(
-        path: '/article/:eventId',
-        pageBuilder: (context, state) {
-          final event = state.extra as Model;
-          return AppSlideInScreen(
-            child: Consumer(
-              builder: (context, ref, _) {
-                return ArticleScreen(
-                  article: event as Article,
                 );
               },
             ),

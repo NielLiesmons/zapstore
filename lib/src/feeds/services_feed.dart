@@ -4,38 +4,32 @@ import 'package:models/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/resolvers.dart';
 
-class CommunityJobsFeed extends ConsumerWidget {
-  final Community community;
-
-  const CommunityJobsFeed({
+class ServicesFeed extends ConsumerWidget {
+  const ServicesFeed({
     super.key,
-    required this.community,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(query<Job>());
+    final state = ref.watch(query<Service>());
 
     if (state case StorageLoading()) {
       return const AppLoadingFeed();
     }
 
-    final jobs = state.models.cast<Job>();
+    final services = state.models.cast<Service>();
 
     return AppContainer(
-      padding: const AppEdgeInsets.all(AppGapSize.s12),
       child: Column(
         children: [
-          for (final job in jobs)
+          for (final service in services)
             Column(
               children: [
-                AppJobCard(
-                  job: job,
-                  isUnread: true,
+                AppFeedService(
+                  service: service,
                   onTap: (event) =>
-                      context.push('/job/${event.id}', extra: event),
+                      context.push('/service/${event.id}', extra: event),
                 ),
-                const AppGap.s12(),
               ],
             ),
         ],

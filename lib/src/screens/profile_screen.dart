@@ -3,7 +3,6 @@ import 'package:models/models.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../providers/resolvers.dart';
 import '../providers/history.dart';
-import '../feeds/profile_communities_feed.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   final Profile profile;
@@ -71,9 +70,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
               TabData(
                 label: 'Communities',
                 icon: AppEmojiContentType(contentType: 'community'),
-                content: ProfileCommunitiesFeed(
-                  profile: widget.profile,
-                ),
+                content: const SizedBox(),
               ),
               TabData(
                 label: 'Books',

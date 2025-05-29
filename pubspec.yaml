@@ -32,12 +32,13 @@ dependencies:
     path: ../zaplab_design
     # git:
     #   url: https://github.com/NielLiesmons/zaplab_design.git
-    #   ref: 7235cd1
+    #   ref: 49722ad
 
   models:
     git:
-      url: https://github.com/purplebase/models.git
-      ref: "6d096b1"
+      url: https://github.com/purplebase/models
+      ref: 217fdc3
+
   amber_signer:
     path: ../amber_signer
   flutter:

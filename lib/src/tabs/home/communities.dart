@@ -3,30 +3,28 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:models/models.dart';
 import 'package:zaplab_design/zaplab_design.dart';
 
-class JobsTab extends StatelessWidget {
-  const JobsTab({super.key});
+class CommunitiesTab extends StatelessWidget {
+  const CommunitiesTab({super.key});
 
   TabData tabData(BuildContext context) {
     return TabData(
-      label: 'Jobs',
-      icon: const AppEmojiContentType(contentType: 'job'),
+      label: 'Communities',
+      icon: const AppEmojiContentType(contentType: 'community'),
       content: HookConsumer(
         builder: (context, ref, _) {
-          final jobs = ref.watch(query<Job>()).models.cast<Job>();
+          final services = ref.watch(query<Service>()).models.cast<Service>();
 
           return AppContainer(
-            padding: const AppEdgeInsets.all(AppGapSize.s12),
             child: Column(
               children: [
-                for (final job in jobs)
+                for (final service in services)
                   Column(
                     children: [
-                      AppJobCard(
-                        job: job,
-                        onTap: (model) => context.push('/job/${model.id}'),
-                        isUnread: true,
+                      AppFeedService(
+                        service: service,
+                        onTap: (event) =>
+                            context.push('/service/${event.id}', extra: event),
                       ),
-                      const AppGap.s12(),
                     ],
                   ),
               ],
